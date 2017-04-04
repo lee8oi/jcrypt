@@ -52,13 +52,12 @@ func init() {
 
 //NewKey sets Crypt.key to a randomized 32 byte key to be used in encryption.
 func (c *Crypt) NewKey() {
-	alphanum := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes = make([]byte, 32)
-	rand.Read(bytes)
-	for i, b := range bytes {
-		bytes[i] = alphanum[b%byte(len(alphanum))]
+	b := make([]byte, 32)
+	_, err := rand.Read(b)
+	if err != nil {
+		panic(err)
 	}
-	c.key = bytes
+	c.key = b
 }
 
 //ObjectToFile converts a data object to json then saves it to file with Crypt.SaveFile.
